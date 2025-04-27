@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "affine.fullname" . }}
+  labels:
+    {{- include "affine.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "affine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "affine.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "affine.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: affine-migration
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['sh', '-c', 'node ./scripts/self-host-predeploy.js']
+          env:
+            - name: REDIS_SERVER_HOST
+              {{- if .Values.redis.enabled }}
+              value: {{ printf "%s-redis-master" .Release.Name | quote }}
+              {{- else }}
+              value: "redis" # Placeholder if external redis is used
+              {{- end }}
+            - name: DATABASE_URL
+              {{- if .Values.postgresql.enabled }}
+              value: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}
+              {{- else }}
+              value: "postgresql://user:password@postgres:5432/affine" # Placeholder if external DB is used
+              {{- end }}
+            {{- range $key, $value := .Values.affine.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            {{- if .Values.affine.persistence.enabled }}
+            - name: affine-storage
+              mountPath: {{ .Values.affine.persistence.mountPath }}
+            {{- end }}
+            {{- if .Values.affine.configPersistence.enabled }}
+            - name: affine-config
+              mountPath: {{ .Values.affine.configPersistence.mountPath }}
+            {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          # livenessProbe & readinessProbe should be defined based on how Affine signals health
+          # Placeholder probes:
+          livenessProbe:
+            httpGet:
+              path: / # Assuming root path health check, adjust if needed
+              port: http
+          readinessProbe:
+            httpGet:
+              path: / # Assuming root path health check, adjust if needed
+              port: http
+          env:
+            - name: REDIS_SERVER_HOST
+              {{- if .Values.redis.enabled }}
+              value: {{ printf "%s-redis-master" .Release.Name | quote }}
+              {{- else }}
+              value: "redis" # Placeholder if external redis is used
+              {{- end }}
+            - name: DATABASE_URL
+              {{- if .Values.postgresql.enabled }}
+              value: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}
+              {{- else }}
+              value: "postgresql://user:password@postgres:5432/affine" # Placeholder if external DB is used
+              {{- end }}
+            {{- range $key, $value := .Values.affine.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.affine.persistence.enabled }}
+            - name: affine-storage
+              mountPath: {{ .Values.affine.persistence.mountPath }}
+            {{- end }}
+            {{- if .Values.affine.configPersistence.enabled }}
+            - name: affine-config
+              mountPath: {{ .Values.affine.configPersistence.mountPath }}
+            {{- end }}
+      volumes:
+        {{- if .Values.affine.persistence.enabled }}
+        - name: affine-storage
+          persistentVolumeClaim:
+            claimName: {{ include "affine.fullname" . }}-storage
+        {{- end }}
+        {{- if .Values.affine.configPersistence.enabled }}
+        - name: affine-config
+          persistentVolumeClaim:
+            claimName: {{ include "affine.fullname" . }}-config
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
