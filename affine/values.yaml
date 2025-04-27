@@ -51,14 +51,18 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+# This is for setting up a service more information can be found here:
+# https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  # This sets the service type more information can be found here:
+  # https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 3010 # Changed from 80 to 3010 to match compose file
+  # This sets the ports more information can be found here:
+  # https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 3010  # Changed from 80 to 3010 to match compose file
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# This block is for setting up the ingress for more information can be found here:
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: false
   className: ""
@@ -89,7 +93,8 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# This is to setup the liveness and readiness probes more information can be found here:
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
     path: /
@@ -99,7 +104,8 @@ readinessProbe:
     path: /
     port: http
 
-# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+# This section is for setting up autoscaling more information can be found here:
+# https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -155,12 +161,13 @@ affine:
     # SOME_VARIABLE: "some_value"
 
 # PostgreSQL dependency configuration
-# See https://github.com/bitnami/charts/tree/main/bitnami/postgresql for more options
+# See https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+# for more options
 postgresql:
   enabled: true
   auth:
-    username: "user" # Default, consider changing
-    password: "password" # Default, MUST change
+    username: "user"  # Default, consider changing
+    password: "password"  # Default, MUST change
     database: "affine"
   primary:
     persistence:
@@ -170,11 +177,13 @@ postgresql:
       size: 8Gi
 
 # Redis dependency configuration
-# See https://github.com/bitnami/charts/tree/main/bitnami/redis for more options
+# See https://github.com/bitnami/charts/tree/main/bitnami/redis
+# for more options
 redis:
   enabled: true
   auth:
-    enabled: false # Redis in compose doesn't use auth, set to true and provide password if needed
+    # Redis in compose doesn't use auth, set to true and provide password if needed
+    enabled: false
     # password: "changeme"
   master:
     persistence:
@@ -183,4 +192,4 @@ redis:
       # storageClassName: ""
       size: 1Gi
   replica:
-    replicaCount: 0 # No replicas defined in compose
+    replicaCount: 0  # No replicas defined in compose

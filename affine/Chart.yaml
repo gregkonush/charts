@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: affine
 description: Next-gen knowledge base bringing planning, sorting and creating together. Privacy first, open-source, customizable.
@@ -6,8 +7,9 @@ version: 0.0.1
 appVersion: "0.21.4"
 
 maintainers:
-  - name: Greg Konush
+  - name: gregkonush
     email: gregkonush@gmail.com
+    url: https://github.com/gregkonush
 
 sources:
   - https://github.com/toeverything/AFFiNE

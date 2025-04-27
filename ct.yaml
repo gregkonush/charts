@@ -1,4 +1,6 @@
+---
 chart-dirs:
+  - .
+charts:
   - affine
-helm-extra-args: --timeout 600s
-check-version-increment: false
+target-branch: main
