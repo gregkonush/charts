@@ -1,0 +1,25 @@
+---
+apiVersion: v2
+name: affine
+description: Next-gen knowledge base bringing planning, sorting and creating together. Privacy first, open-source, customizable.
+type: application
+version: 0.0.1
+appVersion: "0.21.4"
+
+maintainers:
+  - name: gregkonush
+    email: gregkonush@gmail.com
+    url: https://github.com/gregkonush
+
+sources:
+  - https://github.com/toeverything/AFFiNE
+
+dependencies:
+  - name: postgresql
+    version: "16.6.0"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: "20.13.2"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

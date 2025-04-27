@@ -1,4 +1,4 @@
-# Default values for my-test-chart.
+# Default values for affine.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,11 +7,11 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: nginx
+  repository: ghcr.io/toeverything/affine-graphql
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "stable"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -23,7 +23,7 @@ fullnameOverride: ""
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
+  # Automatically mount a ServiceAccount token.
   automount: true
   # Annotations to add to the service account
   annotations: {}
@@ -38,10 +38,12 @@ podAnnotations: {}
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -49,18 +51,23 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+# This is for setting up a service more information can be found here:
+# https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  # This sets the service type more information can be found here:
+  # https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 80
+  # This sets the ports more information can be found here:
+  # https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 3010  # Changed from 80 to 3010 to match compose file
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# This block is for setting up the ingress for more information can be found here:
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -73,7 +80,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -85,7 +93,8 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# This is to setup the liveness and readiness probes more information can be found here:
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
     path: /
@@ -95,7 +104,8 @@ readinessProbe:
     path: /
     port: http
 
-# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+# This section is for setting up autoscaling more information can be found here:
+# https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -121,3 +131,65 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Affine specific configuration
+affine:
+  # Corresponds to UPLOAD_LOCATION in docker-compose.yml
+  # Define persistence for uploaded files
+  persistence:
+    enabled: true
+    # existingClaim: ""
+    # storageClassName: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    mountPath: /root/.affine/storage
+  # Corresponds to CONFIG_LOCATION in docker-compose.yml
+  # Define persistence for config files
+  configPersistence:
+    enabled: true
+    # existingClaim: ""
+    # storageClassName: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 100Mi
+    mountPath: /root/.affine/config
+  # Environment variables from the .env file in docker-compose
+  env:
+    {}
+    # Example:
+    # SOME_VARIABLE: "some_value"
+
+# PostgreSQL dependency configuration
+# See https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+# for more options
+postgresql:
+  enabled: true
+  auth:
+    username: "user"  # Default, consider changing
+    password: "password"  # Default, MUST change
+    database: "affine"
+  primary:
+    persistence:
+      enabled: true
+      # existingClaim: ""
+      # storageClassName: ""
+      size: 8Gi
+
+# Redis dependency configuration
+# See https://github.com/bitnami/charts/tree/main/bitnami/redis
+# for more options
+redis:
+  enabled: true
+  auth:
+    # Redis in compose doesn't use auth, set to true and provide password if needed
+    enabled: false
+    # password: "changeme"
+  master:
+    persistence:
+      enabled: true
+      # existingClaim: ""
+      # storageClassName: ""
+      size: 1Gi
+  replica:
+    replicaCount: 0  # No replicas defined in compose
