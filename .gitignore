@@ -1,9 +1,6 @@
 # Helm chart archives
 *.tgz
 
-# Helm dependency directory
-charts/
-
 # Helm test output
 test_output.*
 

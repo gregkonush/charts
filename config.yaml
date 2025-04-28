@@ -1,6 +1,4 @@
 ---
 chart-dirs:
-  - .
-charts:
-  - affine
+  - charts
 target-branch: main
