@@ -42,13 +42,13 @@ spec:
               {{- if .Values.redis.enabled }}
               value: {{ printf "%s-redis-master" .Release.Name | quote }}
               {{- else }}
-              value: "redis" # Placeholder if external redis is used
+              value: "redis"
               {{- end }}
             - name: DATABASE_URL
               {{- if .Values.postgresql.enabled }}
               value: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}
               {{- else }}
-              value: "postgresql://user:password@postgres:5432/affine" # Placeholder if external DB is used
+              value: "postgresql://user:password@postgres:5432/affine"
               {{- end }}
             {{- range $key, $value := .Values.affine.env }}
             - name: {{ $key }}
@@ -73,8 +73,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # livenessProbe & readinessProbe should be defined based on how Affine signals health
-          # Placeholder probes:
           livenessProbe:
             httpGet:
               path: / # Assuming root path health check, adjust if needed
@@ -88,13 +86,13 @@ spec:
               {{- if .Values.redis.enabled }}
               value: {{ printf "%s-redis-master" .Release.Name | quote }}
               {{- else }}
-              value: "redis" # Placeholder if external redis is used
+              value: "redis"
               {{- end }}
             - name: DATABASE_URL
               {{- if .Values.postgresql.enabled }}
               value: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}
               {{- else }}
-              value: "postgresql://user:password@postgres:5432/affine" # Placeholder if external DB is used
+              value: "postgresql://user:password@postgres:5432/affine"
               {{- end }}
             {{- range $key, $value := .Values.affine.env }}
             - name: {{ $key }}
