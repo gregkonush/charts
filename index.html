@@ -1,11 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Helm Charts</title>
+  <title>ProompEng AI Helm Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-  
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 p-8">
+  <h2 class="text-xl font-semibold mb-3 dark:text-white">Installation Instructions</h2>
+  <div class="space-y-4 mb-8">
+    <div>
+      <h3 class="text-lg font-medium mb-1 dark:text-gray-100">1. Add the Helm repository:</h3>
+      <pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm overflow-x-auto"><code class="text-gray-800 dark:text-gray-300">helm repo add proompteng https://charts.proompteng.ai</code></pre>
+    </div>
+    <div>
+      <h3 class="text-lg font-medium mb-1 dark:text-gray-100">2. Update your local Helm chart repository cache:</h3>
+      <pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm overflow-x-auto"><code class="text-gray-800 dark:text-gray-300">helm repo update</code></pre>
+    </div>
+    <div>
+      <h3 class="text-lg font-medium mb-1 dark:text-gray-100">3. Install the chart (e.g., selfhosted):</h3>
+      <pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm overflow-x-auto"><code class="text-gray-800 dark:text-gray-300">helm install my-release proompteng/selfhosted</code></pre>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Replace <code>my-release</code> with your desired release name.</p>
+    </div>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-4 dark:text-white">Available Helm Charts</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    <!-- Affine Chart Card -->
+    <a href="https://github.com/gregkonush/charts/tree/main/charts/affine" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700 hover:opacity-50 transition duration-150 ease-in-out">
+      <h3 class="text-lg font-semibold mb-2 dark:text-white">affine</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">AFFiNE is an open-source, privacy-first knowledge base merging docs, whiteboards & databases. An alternative to Notion & Miro.</p>
+      <code class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 p-1 rounded">proompteng/affine</code>
+    </a>
+
+    <!-- Add more chart cards here -->
+  </div>
 </body>
 </html>
