@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/gregkonush/charts/compare/v0.1.1...v0.1.2) (2025-04-28)
+
+
+### Bug Fixes
+
+* update permissions, update formatting ([#8](https://github.com/gregkonush/charts/issues/8)) ([a849204](https://github.com/gregkonush/charts/commit/a849204797c062eace240c95371e467d18401ad1))
+
 ## [0.1.1](https://github.com/gregkonush/charts/compare/v0.1.0...v0.1.1) (2025-04-28)
 
 
