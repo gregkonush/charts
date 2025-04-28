@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/gregkonush/charts/compare/v0.1.2...v0.2.0) (2025-04-28)
+
+
+### Features
+
+* add ingress for affine chart ([#9](https://github.com/gregkonush/charts/issues/9)) ([d3cec35](https://github.com/gregkonush/charts/commit/d3cec35b8ce871b9d715ce5bd1602eecfba70f62))
+
 ## [0.1.2](https://github.com/gregkonush/charts/compare/v0.1.1...v0.1.2) (2025-04-28)
 
 
