@@ -3,7 +3,7 @@ apiVersion: v2
 name: affine
 description: Next-gen knowledge base bringing planning, sorting and creating together. Privacy first, open-source, customizable.
 type: application
-version: 0.1.2
+version: 0.2.0
 appVersion: "0.21.4"
 maintainers:
   - name: gregkonush

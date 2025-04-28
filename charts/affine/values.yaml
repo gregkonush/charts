@@ -79,6 +79,8 @@ ingress:
     - host: chart-example.local
       paths:
         - path: /
+          # ImplementationSpecific is the default pathType in Kubernetes >=1.19.
+          # If you are using an older version of Kubernetes, change this value to Prefix.
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
