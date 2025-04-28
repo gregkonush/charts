@@ -3,6 +3,32 @@ entries:
   affine:
   - apiVersion: v2
     appVersion: 0.21.4
+    created: "2025-04-28T01:18:55.192072747Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.6.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.13.2
+    description: Next-gen knowledge base bringing planning, sorting and creating together.
+      Privacy first, open-source, customizable.
+    digest: 4abf9ece88225fcde154c97ac7c49d9e42bdc9071f8aa06ad48c4c7828c86bbd
+    maintainers:
+    - email: gregkonush@gmail.com
+      name: gregkonush
+      url: https://github.com/gregkonush
+    name: affine
+    sources:
+    - https://github.com/toeverything/AFFiNE
+    type: application
+    urls:
+    - https://github.com/gregkonush/charts/releases/download/affine-0.1.2/affine-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.21.4
     created: "2025-04-28T00:59:47.353169651Z"
     dependencies:
     - condition: postgresql.enabled
@@ -27,4 +53,4 @@ entries:
     urls:
     - https://github.com/gregkonush/charts/releases/download/affine-0.1.1/affine-0.1.1.tgz
     version: 0.1.1
-generated: "2025-04-28T00:59:47.353180431Z"
+generated: "2025-04-28T01:18:55.192082235Z"
