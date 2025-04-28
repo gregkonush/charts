@@ -31,6 +31,14 @@ jobs:
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         id: semantic # Add an ID to reference outputs
+        with:
+          extra_plugins: |
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/changelog
+            @semantic-release/exec
+            @semantic-release/git
+            @semantic-release/github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Add any other necessary tokens like NPM_TOKEN if publishing elsewhere
